@@ -1,0 +1,18 @@
+<Identify>
+    <repositoryName>Harvard Library Open Archive Initiative Repsoitory</repositoryName>
+    <baseURL>http://oai.lib.harvard.edu</baseURL>
+    <protocolVersion>2.0</protocolVersion>
+    <adminEmail>vc-support@hulmail.harvard.edu</adminEmail>
+    <earliestDatestamp>2004-01-01</earliestDatestamp>
+    <deletedRecord>no</deletedRecord>
+    <granularity>YYYY-MM-DD</granularity>
+    <description>
+        <oai-identifier
+            xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai-identifier http://www.openarchives.org/OAI/2.0/oai-identifier.xsd">
+            <scheme>oai</scheme>
+            <repositoryIdentifier>vc.harvard.edu</repositoryIdentifier>
+            <delimiter>:</delimiter>
+            <sampleIdentifier>oai:vc.harvard.edu:cna.00000</sampleIdentifier>
+        </oai-identifier>
+    </description>
+</Identify>
