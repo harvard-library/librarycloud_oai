@@ -2,19 +2,23 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="http://www.openarchives.org/OAI/2.0/"
-    xmlns:lcloud="http://api.lib.harvard.edu/v2/item"
+    xmlns:item="http://api.lib.harvard.edu/v2/item"
     xmlns:mods="http://www.loc.gov/mods/v3"
-    exclude-result-prefixes="lcloud"
+    xmlns:sets="http://hul.harvard.edu/ois/xml/ns/sets" 
+     xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:marc="http://www.loc.gov/MARC21/slim" 
+    xmlns:HarvardDRS="http://hul.harvard.edu/ois/xml/ns/HarvardDRS" 
+    xmlns:librarycloud="http://hul.harvard.edu/ois/xml/ns/librarycloud"
+    exclude-result-prefixes="item"
     version="2.0">
     <!--<xsl:include href="pagination.xsl"/>-->
-    <xsl:output indent="yes" omit-xml-declaration="yes"/>
+    <xsl:output indent="yes" omit-xml-declaration="yes" />
     
     <xsl:template match="/">
         <xsl:choose>
             <xsl:when test="error">
                 <xsl:apply-templates/>
             </xsl:when>
-            <xsl:when test="lcloud:results">
+            <xsl:when test="item:results">
                 <xsl:apply-templates/>
             </xsl:when>
             <xsl:otherwise>
@@ -29,7 +33,7 @@
         <error/>
     </xsl:template>
     
-    <xsl:template match="lcloud:results">
+    <xsl:template match="item:results">
         <!--<xsl:element name="OAI-PMH">
             <xsl:attribute name="xsi:schemaLocation">http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd</xsl:attribute>
             <xsl:element name="responseDate"><xsl:value-of select="current-dateTime()"/></xsl:element>
@@ -39,24 +43,24 @@
             </xsl:element>
         </xsl:element>-->
         <xsl:choose>
-            <xsl:when test="lcloud:pagination/lcloud:numFound =  0">
+            <xsl:when test="item:pagination/item:numFound =  0">
                 <error code="noRecordsMatch">No records match the request criteria.</error>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:element name="ListRecords">
                     <!--<xsl:apply-templates/>-->
-                    <xsl:apply-templates select="lcloud:items"/>
-                    <xsl:apply-templates select="lcloud:pagination"/>
+                    <xsl:apply-templates select="item:items"/>
+                    <xsl:apply-templates select="item:pagination"/>
                 </xsl:element>                
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
   
-    <xsl:template match="lcloud:items">
+    <xsl:template match="item:items">
         <xsl:apply-templates/>
     </xsl:template>
 
-    <xsl:template match="lcloud:pagination">
+    <xsl:template match="item:pagination">
         <xsl:call-template name="pagination">
             <xsl:with-param name="metadataPrefix" select="'mods'"/>
         </xsl:call-template>
@@ -70,29 +74,31 @@
             </xsl:element>
             <xsl:element name="metadata">
                 <mods:mods xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd" version="3.6">
-                    <xsl:copy-of select="*"/>              
+                    <xsl:copy-of select="*" copy-namespaces="no"/>              
                 </mods:mods>
             </xsl:element>
         </xsl:element>    
     </xsl:template>
  
+    <xsl:template match="@xmlns"/>
+ 
     <xsl:template name="pagination">
         <xsl:param name="metadataPrefix"></xsl:param>
         <xsl:choose>
-            <xsl:when test="lcloud:limit + lcloud:start + 1 &lt; lcloud:numFound">
+            <xsl:when test="item:limit + item:start + 1 &lt;= item:numFound">
                 <xsl:element name="resumptionToken">
                     <xsl:attribute name="completeListSize">
-                        <xsl:value-of select="lcloud:numFound"/>
+                        <xsl:value-of select="item:numFound"/>
                     </xsl:attribute>
-                    <xsl:value-of select="lcloud:limit + lcloud:start"/>
+                    <xsl:value-of select="item:limit + item:start"/>
                     <xsl:choose>
-                        <xsl:when test="not(contains(lcloud:query,'setSpec=')) and not(contains(lcloud:query,'source='))">
+                        <xsl:when test="not(contains(item:query,'setSpec=')) and not(contains(item:query,'source='))">
                             <xsl:text>:0001-01-01:9999-12-31:ALL</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
                             <!-- TO DO: deal with from until -->
                             <xsl:text>:0001-01-01:9999-12-31</xsl:text>
-                            <xsl:for-each select="tokenize(lcloud:query,'&amp;')">
+                            <xsl:for-each select="tokenize(item:query,'&amp;')">
                                 <xsl:if test="starts-with(.,'setSpec')">
                                     <xsl:text>:</xsl:text><xsl:value-of select="substring-after(.,'=')"/>
                                 </xsl:if>
