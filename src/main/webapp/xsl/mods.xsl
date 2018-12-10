@@ -92,7 +92,7 @@
                     </xsl:attribute>
                     <xsl:value-of select="item:limit + item:start"/>
                     <xsl:choose>
-                        <xsl:when test="not(contains(item:query,'setSpec=')) and not(contains(item:query,'source='))">
+                        <xsl:when test="not(contains(item:query,'setSpec_exact=')) and not(contains(item:query,'source='))">
                             <xsl:text>:0001-01-01:9999-12-31:ALL</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>

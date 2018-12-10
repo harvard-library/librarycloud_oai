@@ -60,7 +60,7 @@
                     </xsl:attribute>
                     <xsl:value-of select="lcloud:limit + lcloud:start"/>
                     <xsl:choose>
-                        <xsl:when test="not(contains(lcloud:query,'setSpec=')) and not(contains(lcloud:query,'source='))">
+                        <xsl:when test="not(contains(lcloud:query,'setSpec_exact=')) and not(contains(lcloud:query,'source='))">
                             <xsl:text>:0001-01-01:9999-12-31:ALL</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
