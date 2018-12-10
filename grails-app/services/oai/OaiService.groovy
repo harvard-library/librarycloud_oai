@@ -64,7 +64,7 @@ class OaiService {
       def rt = params.resumptionToken
       def qs = "";
       if (rt == null) {
-        qs = params.set == null ? "" : params.set in ['ALEPH','VIA','OASIS'] ? "source=MH:" + params.set : "setSpec=" + params.set
+        qs = params.set == null ? "" : params.set in ['ALMA','VIA','OASIS'] ? "source=MH:" + params.set : "setSpec_exact=" + params.set
         //turn off from/until for now (2016-01-11), won't work until date range searching implemented in solr/librarycloud api
         if (params.from != null)
           qs += "&from=" + params.from
@@ -74,7 +74,7 @@ class OaiService {
       else {
         //println(rt)
         qs = "start=" + rt.split(':')[0] // + "&setSpec=" + rt.split(':')[3]
-        qs += rt.split(':')[3] in ['ALEPH','VIA','OASIS'] ? "&source=MH:" + rt.split(':')[3] : rt.split(':')[3] == 'ALL' ? "" : "&setSpec=" + rt.split(':')[3]
+        qs += rt.split(':')[3] in ['ALMA','VIA','OASIS'] ? "&source=MH:" + rt.split(':')[3] : rt.split(':')[3] == 'ALL' ? "" : "&setSpec_exact=" + rt.split(':')[3]
         //turn off from/until for now (2016-01-11), won't work until date range searching implemented in solr/librarycloud api
         if (!rt.split(':')[1].equals('0001-01-01'))
           qs += "&from=" + rt.split(':')[1]
