@@ -70,7 +70,7 @@
         <xsl:element name="record">
             <xsl:element name="header">
                 <xsl:element name="identifier"><xsl:value-of select="mods:recordInfo/mods:recordIdentifier"/></xsl:element>
-                <xsl:element name="datestamp"><xsl:value-of select="substring(mods:recordInfo/mods:recordChangeDate,1,8)"/></xsl:element>
+                <xsl:element name="datestamp"><xsl:value-of select="substring(mods:recordInfo/mods:recordChangeDate[1],1,8)"/></xsl:element>
             </xsl:element>
             <xsl:element name="metadata">
                 <mods:mods xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd" version="3.6">
