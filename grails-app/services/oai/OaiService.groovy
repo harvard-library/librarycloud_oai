@@ -46,7 +46,7 @@ class OaiService {
     def cannotDisseminateFormat(params, allowedParams) {
       def error = ''
       def metadataPrefix = params.resumptionToken == null ? params.metadataPrefix : params.resumptionToken.split(":")[4]
-      def allowedPrefixes = ['oai_dc','omeka_dc', 'mods']
+      def allowedPrefixes = ['oai_dc', 'mods']
       if (! (metadataPrefix in allowedPrefixes)) {
         error = '<error code="cannotDisseminateFormat">' + metadataPrefix +  ' is not supported by the item or by the repository</error>'
         error = buildOai(params, error, allowedParams)
@@ -67,9 +67,9 @@ class OaiService {
         qs = params.set == null ? "" : params.set in ['ALMA','VIA','OASIS'] ? "source=MH:" + params.set : "setSpec_exact=" + params.set
         //turn off from/until for now (2016-01-11), won't work until date range searching implemented in solr/librarycloud api
         if (params.from != null)
-          qs += "&from=" + params.from
+          qs += "&processed.after=" + params.from
         if (params.until != null)
-          qs += "&until=" + params.until
+          qs += "&processed.before=" + params.until
       }
       else {
         //println(rt)
@@ -77,9 +77,9 @@ class OaiService {
         qs += rt.split(':')[3] in ['ALMA','VIA','OASIS'] ? "&source=MH:" + rt.split(':')[3] : rt.split(':')[3] == 'ALL' ? "" : "&setSpec_exact=" + rt.split(':')[3]
         //turn off from/until for now (2016-01-11), won't work until date range searching implemented in solr/librarycloud api
         if (!rt.split(':')[1].equals('0001-01-01'))
-          qs += "&from=" + rt.split(':')[1]
+          qs += "&processed.after=" + rt.split(':')[1]
         if (!rt.split(':')[2].equals('9999-12-31'))
-          qs += "&until=" + rt.split(':')[2]
+          qs += "&processed.before=" + rt.split(':')[2]
       }
       qs += "&sort=recordIdentifier"
       return qs

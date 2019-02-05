@@ -29,7 +29,7 @@ class OaiController {
 
     def listMetadataFormats () {
       def requiredParams = null
-      def allowedParams = null
+      def allowedParams = ['identifier']
       def errors = oaiService.validateArguments(params, requiredParams, allowedParams)
       if (!errors.equals('')) {
         render(text: errors, contentType: "text/xml", encoding: "UTF-8")
@@ -41,14 +41,14 @@ class OaiController {
     }
 
     def listSets () {
-      def requiredParams = null
-      def allowedParams = null
+      def requiredParams = null //params.resumptionToken == null ? null : ['resumptionToken']
+      def allowedParams = null //params.resumptionToken == null ? null : requiredParams
       def errors = oaiService.validateArguments(params, requiredParams, allowedParams)
       if (!errors.equals('')) {
         render(text: errors, contentType: "text/xml", encoding: "UTF-8")
         return
       }
-      def xmlUrl = oaiService.getCollectionsUrl() + '.xml'
+      def xmlUrl = oaiService.getCollectionsUrl() + '.xml?limit=250'
       def xslName = oaiService.getXslDir() + '/listsets.xsl'
       def listSetsXml = oaiService.transformApiXml(xmlUrl, xslName)
       def listSetsOai = oaiService.buildOai(params, listSetsXml, allowedParams)
@@ -84,8 +84,8 @@ class OaiController {
     }
 
     def listRecords () {
-      def requiredParams = params.resumptionToken == null ? ['metadataPrefix'] : ['resumptionToken']
-      def allowedParams = params.resumptionToken == null ? requiredParams + ['set','from','until'] : requiredParams
+      def requiredParams = params.resumptionToken == null ? ['metadataPrefix','set'] : ['resumptionToken']
+      def allowedParams = params.resumptionToken == null ? requiredParams + ['from','until'] : requiredParams
       def errors = oaiService.validateArguments(params, requiredParams, allowedParams)
       if (!errors.equals('')) {
         render(text: errors, contentType: "text/xml", encoding: "UTF-8")
@@ -107,8 +107,8 @@ class OaiController {
 
     def listIdentifiers () {
 
-      def requiredParams = params.resumptionToken == null ? ['metadataPrefix'] : ['resumptionToken']
-      def allowedParams = params.resumptionToken == null ? requiredParams + ['set','from','until'] : requiredParams
+      def requiredParams = params.resumptionToken == null ? ['metadataPrefix','set'] : ['resumptionToken']
+      def allowedParams = params.resumptionToken == null ? requiredParams + ['from','until'] : requiredParams
 
       def errors = oaiService.validateArguments(params, requiredParams, allowedParams)
       if (!errors.equals('')) {

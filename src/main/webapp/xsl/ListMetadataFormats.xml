@@ -5,11 +5,6 @@
         <metadataNamespace>http://www.openarchives.org/OAI/2.0/oai_dc/</metadataNamespace>
     </metadataFormat>
     <metadataFormat>
-        <metadataPrefix>omeka_dc</metadataPrefix>
-        <schema>http://www.openarchives.org/OAI/2.0/oai_dc.xsd</schema>
-        <metadataNamespace>http://www.openarchives.org/OAI/2.0/oai_dc/</metadataNamespace>
-    </metadataFormat>
-    <metadataFormat>
         <metadataPrefix>mods</metadataPrefix>
         <schema>http://www.loc.gov/standards/mods/v3/mods-3-0.xsd</schema>
         <metadataNamespace>http://www.loc.gov/mods/v3</metadataNamespace>
