@@ -6,7 +6,7 @@
     </metadataFormat>
     <metadataFormat>
         <metadataPrefix>mods</metadataPrefix>
-        <schema>http://www.loc.gov/standards/mods/v3/mods-3-0.xsd</schema>
+        <schema>http://www.loc.gov/standards/mods/v3/mods-3-6.xsd</schema>
         <metadataNamespace>http://www.loc.gov/mods/v3</metadataNamespace>
     </metadataFormat>
 </ListMetadataFormats>
