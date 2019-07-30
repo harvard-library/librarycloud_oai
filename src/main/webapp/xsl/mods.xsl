@@ -84,6 +84,13 @@
  
     <xsl:template name="pagination">
         <xsl:param name="metadataPrefix"></xsl:param>
+        <xsl:element name="resumptionToken">
+            <xsl:attribute name="completeListSize">
+                <xsl:value-of select="item:numFound"/>
+            </xsl:attribute>
+            <xsl:value-of select="item:nextCursor"/><xsl:value-of select="$metadataPrefix"/>
+        </xsl:element>
+        <!--
         <xsl:choose>
             <xsl:when test="item:limit + item:start + 1 &lt;= item:numFound">
                 <xsl:element name="resumptionToken">
@@ -108,12 +115,13 @@
                             </xsl:for-each>                            
                         </xsl:otherwise>
                     </xsl:choose>
-                    <xsl:text>:</xsl:text><xsl:value-of select="$metadataPrefix"/>
+                    <!--<xsl:text>:</xsl:text><xsl:value-of select="$metadataPrefix"/>-->
                 </xsl:element>
             </xsl:when>
             <xsl:otherwise>
             </xsl:otherwise>
         </xsl:choose>
+        -->
     </xsl:template>
  
     <xsl:template match="*"/> 
