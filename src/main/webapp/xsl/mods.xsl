@@ -103,7 +103,6 @@
                             <xsl:text>:0001-01-01:9999-12-31:ALL</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
-                            <!-- TO DO: deal with from until -->
                             <xsl:text>:0001-01-01:9999-12-31</xsl:text>
                             <xsl:for-each select="tokenize(item:query,'&amp;')">
                                 <xsl:if test="starts-with(.,'setSpec')">
@@ -115,7 +114,7 @@
                             </xsl:for-each>                            
                         </xsl:otherwise>
                     </xsl:choose>
-                    <!--<xsl:text>:</xsl:text><xsl:value-of select="$metadataPrefix"/>-->
+                    <xsl:text>:</xsl:text><xsl:value-of select="$metadataPrefix"/>
                 </xsl:element>
             </xsl:when>
             <xsl:otherwise>
