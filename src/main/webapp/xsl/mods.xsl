@@ -48,10 +48,26 @@
             </xsl:when>
             <xsl:otherwise>
                 <xsl:element name="ListRecords">
-                    <!--<xsl:apply-templates/>-->
-                    <xsl:apply-templates select="item:items"/>
-                    <xsl:apply-templates select="item:pagination"/>
-                </xsl:element>                
+                    <xsl:choose>
+                        <xsl:when test="item:items/mods:mods">
+                            <xsl:apply-templates select="item:items"/>
+                            <xsl:apply-templates select="item:pagination"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:element name="record">
+                                <xsl:element name="header">
+                                    <xsl:element name="identifier">NOID</xsl:element>
+                                    <xsl:element name="datestamp">20191231</xsl:element>
+                                </xsl:element>
+                                <xsl:element name="metadata">
+                                    <mods:mods xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd" version="3.6"/>
+                                </xsl:element>
+                            </xsl:element>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <!--<xsl:apply-templates select="item:items"/>
+                    <xsl:apply-templates select="item:pagination"/>-->
+                </xsl:element>              
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
