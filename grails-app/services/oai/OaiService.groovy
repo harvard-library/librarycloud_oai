@@ -70,18 +70,19 @@ class OaiService {
           qs += "&processed.after=" + params.from
         if (params.until != null)
           qs += "&processed.before=" + params.until
-        qs += "&sort=recordIdentifier"
+        //qs += "&sort=score desc, recordIdentifier asc"
+        qs += "&cursor=*"
       }
       else {
         //println(rt)
-        //qs = "start=" + rt.split(':')[0] // + "&setSpec=" + rt.split(':')[3]
-        qs = "cursor=" + rt // + "&setSpec=" + rt.split(':')[3]
-        //qs += rt.split(':')[3] in ['ALMA','VIA','OASIS'] ? "&source=MH:" + rt.split(':')[3] : rt.split(':')[3] == 'ALL' ? "" : "&setSpec_exact=" + rt.split(':')[3]
+        qs = "cursor=" + rt.split(':')[0] // + "&setSpec=" + rt.split(':')[3]
+        //qs = "cursor=" + rt.split(":")[0] + "&setSpec=" + rt.split(':')[3]
+        qs += rt.split(':')[3] in ['ALMA','VIA','OASIS'] ? "&source=MH:" + rt.split(':')[3] : rt.split(':')[3] == 'ALL' ? "" : "&setSpec_exact=" + rt.split(':')[3]
         //turn off from/until for now (2016-01-11), won't work until date range searching implemented in solr/librarycloud api
-        //if (!rt.split(':')[1].equals('0001-01-01'))
-        //  qs += "&processed.after=" + rt.split(':')[1]
-        //if (!rt.split(':')[2].equals('9999-12-31'))
-        //  qs += "&processed.before=" + rt.split(':')[2]
+        if (!rt.split(':')[1].equals('0001-01-01'))
+          qs += "&processed.after=" + rt.split(':')[1]
+        if (!rt.split(':')[2].equals('9999-12-31'))
+          qs += "&processed.before=" + rt.split(':')[2]
       }
       //qs += "&sort=recordIdentifier"
       return qs

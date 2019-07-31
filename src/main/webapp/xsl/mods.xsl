@@ -88,7 +88,24 @@
             <xsl:attribute name="completeListSize">
                 <xsl:value-of select="item:numFound"/>
             </xsl:attribute>
-            <xsl:value-of select="item:nextCursor"/><xsl:value-of select="$metadataPrefix"/>
+            <xsl:value-of select="item:nextCursor"/>
+            <xsl:choose>
+                <xsl:when test="not(contains(item:query,'setSpec_exact=')) and not(contains(item:query,'source='))">
+                    <xsl:text>:0001-01-01:9999-12-31:ALL</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>:0001-01-01:9999-12-31</xsl:text>
+                    <xsl:for-each select="tokenize(item:query,'&amp;')">
+                        <xsl:if test="starts-with(.,'setSpec')">
+                            <xsl:text>:</xsl:text><xsl:value-of select="substring-after(.,'=')"/>
+                        </xsl:if>
+                        <xsl:if test="starts-with(.,'source')">
+                            <xsl:text>:</xsl:text><xsl:value-of select="substring-after(.,':')"/>
+                        </xsl:if>
+                    </xsl:for-each>                            
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>:</xsl:text><xsl:value-of select="$metadataPrefix"/>
         </xsl:element>
         <!--
         <xsl:choose>
