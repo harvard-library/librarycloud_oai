@@ -88,7 +88,7 @@
             <xsl:attribute name="completeListSize">
                 <xsl:value-of select="item:numFound"/>
             </xsl:attribute>
-            <xsl:value-of select="item:nextCursor"/><xsl:value-of select="$metadataPrefix"/>
+            <xsl:value-of select="item:nextCursor"/>:<xsl:value-of select="$metadataPrefix"/>
         </xsl:element>
         <!--
         <xsl:choose>

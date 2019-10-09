@@ -91,7 +91,7 @@ class OaiController {
         render(text: errors, contentType: "text/xml", encoding: "UTF-8")
         return
       }
-      def metadataPrefix = params.resumptionToken == null ? params.metadataPrefix : params.resumptionToken.split(":")[4]
+      def metadataPrefix = params.resumptionToken == null ? params.metadataPrefix : params.resumptionToken.split(":")[1]
       def cannotDisseminateFormatError = oaiService.cannotDisseminateFormat(params,allowedParams)
       if (!cannotDisseminateFormatError.equals('')) {
         render(text: cannotDisseminateFormatError, contentType: "text/xml", encoding: "UTF-8")

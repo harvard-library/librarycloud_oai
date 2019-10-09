@@ -45,7 +45,7 @@ class OaiService {
 
     def cannotDisseminateFormat(params, allowedParams) {
       def error = ''
-      def metadataPrefix = params.resumptionToken == null ? params.metadataPrefix : params.resumptionToken.split(":")[4]
+      def metadataPrefix = params.resumptionToken == null ? params.metadataPrefix : params.resumptionToken.split(":")[1]
       def allowedPrefixes = ['oai_dc', 'mods']
       if (! (metadataPrefix in allowedPrefixes)) {
         error = '<error code="cannotDisseminateFormat">' + metadataPrefix +  ' is not supported by the item or by the repository</error>'
@@ -75,7 +75,7 @@ class OaiService {
       else {
         //println(rt)
         //qs = "start=" + rt.split(':')[0] // + "&setSpec=" + rt.split(':')[3]
-        qs = "cursor=" + rt // + "&setSpec=" + rt.split(':')[3]
+        qs = "cursor=" + rt.split(":")[0] // + "&setSpec=" + rt.split(':')[3]
         //qs += rt.split(':')[3] in ['ALMA','VIA','OASIS'] ? "&source=MH:" + rt.split(':')[3] : rt.split(':')[3] == 'ALL' ? "" : "&setSpec_exact=" + rt.split(':')[3]
         //turn off from/until for now (2016-01-11), won't work until date range searching implemented in solr/librarycloud api
         //if (!rt.split(':')[1].equals('0001-01-01'))
