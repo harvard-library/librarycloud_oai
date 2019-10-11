@@ -45,7 +45,7 @@ class OaiService {
 
     def cannotDisseminateFormat(params, allowedParams) {
       def error = ''
-      def metadataPrefix = params.resumptionToken == null ? params.metadataPrefix : params.resumptionToken.split(":")[1]
+      def metadataPrefix = params.resumptionToken == null ? params.metadataPrefix : params.resumptionToken.split(":")[3]
       def allowedPrefixes = ['oai_dc', 'mods']
       if (! (metadataPrefix in allowedPrefixes)) {
         error = '<error code="cannotDisseminateFormat">' + metadataPrefix +  ' is not supported by the item or by the repository</error>'
@@ -64,7 +64,7 @@ class OaiService {
       def rt = params.resumptionToken
       def qs = "";
       if (rt == null) {
-        qs = params.set == null ? "" : params.set in ['ALMA','VIA','OASIS'] ? "source=MH:" + params.set : "setSpec_exact=" + params.set
+        qs = params.set == null ? "" : params.set in ['ALMA','VIA','OASIS'] ? "source=MH:" + params.set : "setSpec_exact=" + params.set + "&cursor=*"
         //turn off from/until for now (2016-01-11), won't work until date range searching implemented in solr/librarycloud api
         if (params.from != null)
           qs += "&processed.after=" + params.from
@@ -75,7 +75,7 @@ class OaiService {
       else {
         //println(rt)
         //qs = "start=" + rt.split(':')[0] // + "&setSpec=" + rt.split(':')[3]
-        qs = "cursor=" + rt.split(":")[0] // + "&setSpec=" + rt.split(':')[3]
+        qs = "cursor=" + rt.split(":")[0] + "&setSpec_exact=" + rt.split(':')[1]
         //qs += rt.split(':')[3] in ['ALMA','VIA','OASIS'] ? "&source=MH:" + rt.split(':')[3] : rt.split(':')[3] == 'ALL' ? "" : "&setSpec_exact=" + rt.split(':')[3]
         //turn off from/until for now (2016-01-11), won't work until date range searching implemented in solr/librarycloud api
         //if (!rt.split(':')[1].equals('0001-01-01'))
@@ -112,10 +112,18 @@ class OaiService {
     }
 
     def transformApiXml(xmlUrl, xslName) {
+        return transformApiXml(xmlUrl, xslName, null)
+    }
 
+    def transformApiXml(xmlUrl, xslName, start) {
+//System.out.println(start);
       def xml = xmlUrl.toURL().newReader('utf-8')
       def xsl = new File(xslName).text;
       def transformer = TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null).newTransformer(new StreamSource(new StringReader(xsl)))
+        if (start == null)
+            System.out.println();
+        else
+            transformer.setParameter("param1", start);
       def StreamResult result=new StreamResult(new StringWriter());
       transformer.transform(new StreamSource(xml), result)
       def transformedXml=result.getWriter();

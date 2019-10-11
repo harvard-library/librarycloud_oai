@@ -13,6 +13,8 @@
     <!--<xsl:include href="pagination.xsl"/>-->
     <xsl:output indent="yes" omit-xml-declaration="yes" />
     
+    <xsl:param name="param1"></xsl:param>
+    
     <xsl:template match="/">
         <xsl:choose>
             <xsl:when test="error">
@@ -84,12 +86,24 @@
  
     <xsl:template name="pagination">
         <xsl:param name="metadataPrefix"></xsl:param>
-        <xsl:element name="resumptionToken">
-            <xsl:attribute name="completeListSize">
-                <xsl:value-of select="item:numFound"/>
-            </xsl:attribute>
-            <xsl:value-of select="item:nextCursor"/>:<xsl:value-of select="$metadataPrefix"/>
-        </xsl:element>
+        <xsl:if test="$param1 + 10 &lt;= item:numFound">
+            <xsl:element name="resumptionToken">
+                <xsl:attribute name="completeListSize">
+                    <xsl:value-of select="item:numFound"/>
+                </xsl:attribute>
+                <xsl:value-of select="item:nextCursor"/>
+                <xsl:for-each select="tokenize(item:query,'&amp;')">
+                    <xsl:if test="starts-with(.,'setSpec')">
+                        <xsl:text>:</xsl:text><xsl:value-of select="substring-after(.,'=')"/>
+                    </xsl:if>
+                    <!--<xsl:if test=".='cursor=*'">
+                        <xsl:text>:10</xsl:text>
+                    </xsl:if>-->
+                </xsl:for-each>
+                <xsl:text>:</xsl:text><xsl:value-of select="$param1"/>
+                <xsl:text>:</xsl:text><xsl:value-of select="$metadataPrefix"/>
+            </xsl:element>
+        </xsl:if>
         <!--
         <xsl:choose>
             <xsl:when test="item:limit + item:start + 1 &lt;= item:numFound">
