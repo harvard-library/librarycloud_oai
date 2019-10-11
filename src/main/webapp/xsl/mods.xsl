@@ -86,7 +86,7 @@
  
     <xsl:template name="pagination">
         <xsl:param name="metadataPrefix"></xsl:param>
-        <xsl:if test="$param1 + 10 &lt;= item:numFound">
+        <xsl:if test="$param1 &lt; item:numFound">
             <xsl:element name="resumptionToken">
                 <xsl:attribute name="completeListSize">
                     <xsl:value-of select="item:numFound"/>

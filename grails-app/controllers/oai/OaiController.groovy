@@ -92,7 +92,7 @@ class OaiController {
         return
       }
       def metadataPrefix = params.resumptionToken == null ? params.metadataPrefix : params.resumptionToken.split(":")[3]
-      def start = params.resumptionToken == null ? "10" : (params.resumptionToken.split(":")[2] as Integer) + 10
+      def start = params.resumptionToken == null ? 10 : (params.resumptionToken.split(":")[2] as Integer) + 10
       def cannotDisseminateFormatError = oaiService.cannotDisseminateFormat(params,allowedParams)
       if (!cannotDisseminateFormatError.equals('')) {
         render(text: cannotDisseminateFormatError, contentType: "text/xml", encoding: "UTF-8")
