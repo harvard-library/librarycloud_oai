@@ -116,7 +116,8 @@ class OaiController {
         render(text: errors, contentType: "text/xml", encoding: "UTF-8")
         return
       }
-
+      def metadataPrefix = params.resumptionToken == null ? params.metadataPrefix : params.resumptionToken.split(":")[3]
+      def start = params.resumptionToken == null ? 10 : (params.resumptionToken.split(":")[2] as Integer) + 10
       def cannotDisseminateFormatError = oaiService.cannotDisseminateFormat(params,allowedParams)
       if (!cannotDisseminateFormatError.equals('')) {
         render(text: cannotDisseminateFormatError, contentType: "text/xml", encoding: "UTF-8")
@@ -126,7 +127,7 @@ class OaiController {
       def queryString = oaiService.getQueryString(params)
       def xmlUrl = oaiService.getItemsUrl() + "?" + queryString
       def xslName = oaiService.getXslDir() + '/listidentifiers.xsl'
-      def listIdentifiersXml = oaiService.transformApiXml(xmlUrl, xslName)
+      def listIdentifiersXml = oaiService.transformApiXml(xmlUrl, xslName, start)
       def listIdentifiersOai = oaiService.buildOai(params, listIdentifiersXml, "resumptionToken")
       render(text: listIdentifiersOai, contentType: "text/xml", encoding: "UTF-8")
     }
